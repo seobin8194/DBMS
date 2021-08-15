@@ -1,0 +1,30 @@
+테이블 스페이스
+테이블 만드는 공간을 확보
+테이블이 저장될 공간
+
+시스템 테이블 스페이스
+오라클 설치시 자동으로 생성
+데베 가동을 위해 꼭 필요
+유저 데이터를 포함할 수 있지만 효율성을 위해 하지 않는다
+
+비 시스템 테이블 스페이스
+유저에게 할당되는 공간
+공간관리를 쉽게 하기 위해서 사용
+테이블 스페이스를 먼저 만들고 테이블을 생성
+
+테이블 스페이스 생성
+CREATE TABLESPACE 테이블스페이스명 DATAFILE '파일경로' SIZE 용량 AUTOEXITEND ON NEXT 증가용량 MAXSIZE 최대용량
+예) CREATE TABLESPACE TESTSPACE DATAFILE'C:\TEST.DBF' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1000M;
+계정만들기전에 테이블 스페이스 만들고 계정 만듬 -> 계정 드롭하고 다시 만듬
+CREATE USER DBMS2 IDENTIFIED BY DBMS2 DEFAULT TABLESPACE TESTSPACE;
+
+테이블 스페이스 영역 할당
+테이블스페이스를 여러 계정에서 사용할 수 있다
+ALTER USER 계정명 QUOTA 용량 ON 테이블스페이스명
+
+CREATE TABLESPACE TESTSPACE DATAFILE'C:\TEST.DBF' SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 1000M;
+
+--계정만들기전에 테이블 스페이스 만들고 계정 만듬 -> 계정 드롭하고 다시 만듬
+CREATE USER DBMS2 IDENTIFIED BY DBMS2 DEFAULT TABLESPACE TESTSPACE;
+GRANT CONNECT, RESOURCE TO DBMS2
+CONN DBMS2/DBMS2 DBMS2로 계정 열고 테이블 생성 진행하면 된다

@@ -1,0 +1,154 @@
+DB
+웹 페이지나 응용프로그램(기능이 구현된 것들)에서 LAN이용하면 다음에 또 사용해야 할 데이터들이 사라진다
+-> 데이터들의 저장소
+    단독으로 사용하는 경우는 없고 프로그램과 연동하여 사용
+
+DBMS(Database Management System)
+데이터베이스 관리 시스템(오라클, 마리아디비..)
+
+RDBMS
+관계형 데이터베이스 관리 시스템
+단순히 데이터를 저장하는 것이 아닌 테이블끼리 서로 관계를 맺는 데이터베이스 관리 시스템
+예시) 쇼핑몰
+사용자관리 프로그램 : 아이디 이름 주소 연락처과 같은 정보가 필요
+주문관리 프로그램 : 아이디 이름 주소 연락처 상품명 가격 재고와 같은 정보가 필요
+------------------------------------------------------------------------------------------------------------------------
+           유저관리 프로그램                                                주문관리 프로그램
+-----------------------------------------------------------------------------------------------------------------------
+회원 테이블[아이디 이름 주소 연락처]           주문테이블[아이디 이름 주소 연락처 상품명 가격 재고]
+                                                                           ---------------------------
+                                                                          회원 테이블의 id로 대체 -> 관계형 db
+
+테이블
+클래스 -> 클래스 하나당 테이블 한개
+데이터들이 저장되는 공간
+표현식
+
+테이블의 특징
+행(row) 하나의 정보-한 사람의 정보. 레코드 튜플
+열(column) 하나의 속성 혹은 필드. 공통된 값들의 주제
+
+pk(priamry key)
+각 행들을 구별하기 위한 고유한 값
+중복이 없어야 하고 비어있지 않음
+예) 주민등록번호 학번
+
+sql(Structured Query Language)
+인터프리터 언어
+한줄씩 번역됨 -> 빈번한 수정이 있을때 효과적
+번역과 동시에 실행된다 -> 따로 번역파일이 존재하지 않는다
+
+sql문
+DDL DML DCL TCL
+DDL (Data Definition Language)
+: 데이터 정의어 -> 테이블을 만드는 언어 테이블에 어떤 데이터가 들어올지 정의
+  : 자료형(type)
+    들어올 데이터의 형태
+    : 문자열 : CHAR(길이) -> CHAR(4)는 영어를 기준으로 4자리 쓸 수 있다
+                                    한글은 한글자당 3자리정도 차지한다
+                                    CHAR(4)에 'A'넣으면 빈자리가 공백으로 채워진다 (->낭비)
+                                    고정적인 길이의 데이터를 넣을때 사용한다
+               VARCHAR(길이) -> VARCHAR(4)에 'A'를 넣으면 공백이 생기지 않고 길이만큼 공간이 배정된다
+               VARCAHR2(길이) -> VARCHAR()와 똑같음. 이걸 사용하갈 권장
+      숫자 : 정수(NUMBER(자릿수)) 실수(NUMBER(전체 자릿수,소수점 자릿수))
+      날짜 : DATE -> 서식에 맞게 시간을 저장하는 타입
+                     지금 순간을 사진찍듯이 현재 시각 데이터를 저장
+
+  테이블에 관련된 쿼리문
+  : create 테이블 생성
+    : CREATE TABLE 테이블명 (
+          컬럼명 자료형 제약조건,   
+          컬럼면 자료형 제약조건,
+          ....
+          CONSTRAINT 제역조건명 제약조건(컬럼명)
+       );
+    alter 
+    : 테이블 수정
+      - 테이블 이름 변경 
+        ALTER TABLE 테이블명 RENAME TO 테이블명;
+      - 컬럼이름 변경
+        ALTER TABLE 테이블명 RENAME COLUMN 컬럼명 TO 컬럼명;
+      - 컬럼추가
+        ALTER TABLE 테이블명 ADD 컬럼명 자료형;
+      - 컬럼 변경
+        컬럼의 크기를 늘릴 수는 있지만 줄일 수는 없다
+        ALTER TABLE 테이블명 MODIFIY (
+            컬럼명 자료형 제약조건
+        );
+      - 컬럼 삭제
+        ALTER TABLE 테이블명 DROP COLUMN 컬럼명;
+      - 제약조건 추가
+        ALTER TABLE 테이블명 ADD CONSTRAINT 제약조건명 제약조건
+      - 제약조건 삭제
+        ALTER TABLE 테이블명 DROP CONSTRAINT 제약조건명; 
+    drop 테이블 삭제
+    : DROP TABLE 테이블명
+      DROP은 지운거 되돌릴 수 있다
+    truncate 데이터 삭제
+    : TRUNCATE TABLE 테이블명
+      TRUNCATE는 틀은 남아있고 데이터만 삭제. 사라진 데이터는 복구불가
+
+DML (Data Manipulation Language)
+데이터 조작어
+실제 데이터를 CRUD하는 명령어
+C Create -> INSERT : 추가
+R Read -> SELECT : 검색
+U Update -> UPDATE : 수정
+D Delete -> DELETE : 삭제
+- SELECT
+: SELECT 컬럼명 FROM 테이블명 WHERE 조건식
+  WHERE 조건절
+  : >, < : 왼쪽이 클때, 작을때 참(초과, 미만)
+   >=, <= : 왼쪽이 크거나 같을때, 작거나 같을때(이상, 이하)
+   = : 같다
+   !=, <> : 같지 않다
+   조건식 AND 조건식 : 두 조거식 모두 참인 경우
+   조건식 OR 조건식 : 두 조건식 중 하나라도 참이면 참
+   컬럼 BETWEEN A AND B : 컬럼의 값이 A와 B사이면 참
+- INSERT
+: INSERT INTO 테이블명(컬럼명1, 컬럼명2,,,) VALUES (값1, 값2,,,,)
+  컬럼명을 제시하면 해당 데이터만 삽입하면 된다. 나머지는 NULL값이 들어간다
+- UPDTAE
+: UPDATE 테이블명 SET 컬럼명=새로운 값 WHERE 조건식
+- DELETE
+: DELETE FROM 테이블명 WHERE 조건식
+
+TCL(Transaction Control Language)
+트랜젝션 제어 언어
+트랜젝션이란? 하나의 작업 단위, 쿼리문 하나
+- COMMIT
+: 모든 작업을 확정짓는 명령어
+  변경된 내용 모두 영구 저장
+- ROLLBACK
+: 이전의 상태로 되돌리는 명령어
+  이전 COMMIT했던 곳까지 복구
+DDL은 오토 COMMIT이고 DML은 ROLLBAKC가능
+
+DCL(Data Control Language)
+데이터 제어 언어
+계정 관련 언어
+- GRANT
+: 권한 부여
+  GRANT 권한명, 롤명 TO 계정명
+  - DDL권한
+    GRANT CREATE TABLE, DROP ANY TABLE TO 계정명
+  - DML 권한
+    명령어 ON 테이블명으로 명령으로 테이블 명을 명시해야 하나 모든 테이블에 대하여 권한을 줄때는 ANY TABLE
+    GRANT INSERT ANY TABLE, SELECT ANY TABLE TO 계정명
+- REVOKE
+: 권한 회수
+  REVOKE 권한명, 롤명 FROM 계정명
+  예) REVOKE INSERT ANY TABLE FROM 계정명
+
+-------------------롤(ROLE)-----------------------
+여러 권한들을 하나로 뭉친 상태(권한의 집합)
+CONNECT RESOURCE DBA
+
+롤 생성
+CREATE 롤 이름;
+GRANT 권한, 권한,,, TO 롤이름
+예) GRANT CREATE TABLE, CREATE VIEW, ALTER ANY TABLE TO TESTROLE;
+
+롤 부여
+GRANT 롤이름 TO 계정
+----------------------------------------------------
